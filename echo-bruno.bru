@@ -1,0 +1,45 @@
+meta {
+  name: echo-bruno
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{url}}
+  body: json
+  auth: inherit
+}
+
+body:json {
+  {
+    "name":"usebruno"
+  }
+}
+
+assert {
+  res.status: eq 200
+  res.body: isJson
+}
+
+script:pre-request {
+  req.setBody({
+    "username":"usebruno",
+    "password":"123abc"
+  })
+  
+  req.setHeader("value", "text")
+}
+
+script:post-response {
+  console.log(res.body)
+}
+
+tests {
+  test("res body have name property", function(){
+       expect(res.body.name).to.eql("FOSS")
+  })
+}
+
+settings {
+  encodeUrl: true
+}
